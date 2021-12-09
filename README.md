@@ -16,21 +16,21 @@ General Code Conventions
 C++ Specific
 ------------
 
-* “private:” and “public:” tags aligned with “class” keyword
-* Class name start with a capital letter
-* Filename all lowercase and using dash as word separator
-* Header file use “#pragma once”
-* Private members start with an underscore (“_”) prefix
-* Keep your lines to about 80 characters or less in length
+* `private:` and `public:` tags aligned with `class` keyword.
+* Class name start with a capital letter.
+* Filename all lowercase and using dash as word separator.
+* Header file use `#pragma once`.
+* Private members start with an underscore (`_`) prefix.
+* Keep your lines to about 80 characters or less in length.
 * No copy-and-paste from an open source projects. Clean code is an important requirement. If inserting code taken from other source, specify licenses together with the pull request, and we will evaluate if there is not conflicts.
-* When there is something not covered in these instructions, we follow `this guide <https://google.github.io/styleguide/cppguide.html>`_.
+* When there is something not covered in these instructions, we follow [The Google Style Guide](https://google.github.io/styleguide/cppguide.html).
 
 Workflow Conventions
 --------------------
 
-We follow `this workflow model <http://nvie.com/posts/a-successful-git-branching-model/>`_.
+We follow [this workflow model](http://nvie.com/posts/a-successful-git-branching-model/).
 
-* Develop/debug on a branch, started at "develop" (e.g., git checkout develop; git checkout –b <NEW-FEATURE>).
+* Develop/debug on a branch, started at "develop" (e.g., `git checkout develop`; `git checkout –b <NEW-FEATURE>`).
 
 * Prefer smaller, independent commits (make them ideally suited for “cherry-picking”)
 
