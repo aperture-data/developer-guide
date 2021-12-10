@@ -36,12 +36,12 @@ Member values should be initialized in the constructor with minimal modification
 class MyObject
 {
     int _a;
-    string _b;
+    std::string _b;
     Thing* _c;
 public:
     MyObject() {}
     void SetA(int a) { _a = a; }
-    void SetB(const string& b) { _b = b; }
+    void SetB(const std::string& b) { _b = b; }
     void SetC(Arg arg) { _c = new Thing(arg); }
     ~MyObject() { if(_c)delete _c; }
 };
@@ -54,10 +54,10 @@ public:
 class MyObject
 {
     int _a;
-    string _b;
-    std::unique_ptr<Thing>_c;
+    std::string _b;
+    std::unique_ptr<Thing> _c;
 public:
-    MyObject(int a,const string& b,Arg arg) {
+    MyObject(int a, const std::string& b, Arg arg) {
         _a = a;
         _b = b;
         _c = new Thing(arg);
@@ -72,10 +72,10 @@ This interface informs how `MyObject` should be constructed, and guarantees that
 class MyObject
 {
     const int _a;
-    const string _b;
+    const std::string _b;
     Thing _c;
 public:
-    MyObject(int a,string b,Arg arg)
+    MyObject(int a, std::string b, Arg arg)
         : _a(a)
         , _b(std::move(b))
         , _c(arg)
@@ -83,7 +83,7 @@ public:
 };
 ```
 
-Members are initialized in place instead of being default-initialized and reset in the ctor body. `_c` is constructed in place as a native member, removing the need for the unique_ptr indirection. `_b` is move-constructed, which saves a string copy when the constructor is called with an r-value for `b`.
+Members are initialized in place instead of being default-initialized and reset in the ctor body. `_c` is constructed in place as a native member, removing the need for the `unique_ptr` indirection. `_b` is move-constructed, which saves a string copy when the constructor is called with an r-value for `b`.
 
 ## 5. Leverage compiler for construction/destruction ordering
 
@@ -101,7 +101,7 @@ class Server
     void do_work(APIHandler& handler);
 
 public:
-    Server(const string& config_file)
+    Server(const std::string& config_file)
     : _cfg(config_file)
     , _log(_cfg)
     , _handler(_cfg, _log)
@@ -126,9 +126,9 @@ Consider the following global singleton pattern.
 class GlobalObject
 {
     GlobalObject();
-    static std::unique_ptr<GlobalObject>_inst;
+    static std::unique_ptr<GlobalObject> _inst;
 public:
-    static bool init() {if(!_inst)_inst = new GlobalObject(); }
+    static bool init() {if(!_inst) _inst = new GlobalObject(); }
     static void destroy() { _inst.reset(); }
     static GlobalObject& instance() { init(); return *_inst; }
 };
