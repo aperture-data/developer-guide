@@ -22,6 +22,8 @@ C++ Specific
 * Header file use `#pragma once`.
 * Private members start with an underscore (`_`) prefix.
 * Keep your lines to about 80 characters or less in length.
+* Prefer exceptions for error handling over error codes.
+* Follow [RAII best practices](RAII.md) for resource management.
 * No copy-and-paste from an open source projects. Clean code is an important requirement. If inserting code taken from other source, specify licenses together with the pull request, and we will evaluate if there is not conflicts.
 * When there is something not covered in these instructions, we follow [The Google Style Guide](https://google.github.io/styleguide/cppguide.html).
 
