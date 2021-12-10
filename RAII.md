@@ -11,7 +11,6 @@ Additionally, this simplifies development by keeping resource acquisition and re
 
 The following are practical guidelines for developing RAII-compliant code.
 
-----------------------------------------------
 ## 1. Prefer smart pointers to `new`, `delete`
 
 This [prevents leaks](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Re-raii). It also provides better context about how objects are managed compared to raw pointers.
@@ -20,17 +19,14 @@ This [prevents leaks](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelin
 
 - Use of `new` is ok when constructing or assigning to a `unique_ptr` (until C++14 where [std::make_unique](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique) is available).
 
-----------------------------------------------
 ## 2. Wrap pairwise system & library calls
 
 Eg. [`SSL_CTX_new()`](https://www.openssl.org/docs/manmaster/man3/SSL_CTX_new.html) and [`SSL_CTX_free()`](https://www.openssl.org/docs/manmaster/man3/SSL_CTX_free.html) are wrapped in [`OpenSSLPointer<SSL_CTX>`](https://github.com/aperture-data/aperturedb-cpp/blob/0421139ebcb03997e02864d9c92ae8f6af8a01b8/src/comm/TLS.h#L27-L42). Interfaces should be expressed in terms of the RAII wrapper type rather than the raw type whenever possible to enforce its usage.
 
-----------------------------------------------
 ## 3. Exceptions should not escape a destructor
 
 Even though compilers don’t consistently enforce it, [destructors are implicitly `noexcept`](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rc-dtor-noexcept). If a destructor throws during exception handling, the process will immediately terminate (which is probably not what we want, even if the issue is fatal). Any calls made by a destructor should be themselvesnoexcept or wrapped in a `try..catch`.
 
-----------------------------------------------
 ## 4. Initialize values once
 
 Member values should be initialized in the constructor with minimal modifications. All members should be initialized as a postcondition of the constructor. If that is not possible, the constructor should throw.
@@ -89,7 +85,6 @@ public:
 
 Members are initialized in place instead of being default-initialized and reset in the ctor body. `_c` is constructed in place as a native member, removing the need for the unique_ptr indirection. `_b` is move-constructed, which saves a string copy when the constructor is called with an r-value for `b`.
 
-----------------------------------------------
 ## 5. Leverage compiler for construction/destruction ordering
 
 The compiler guarantees that members are constructed in declared order and destructed in the inverse order. Take advantage of this to control the lifecycles of related/interdependent objects.
@@ -121,7 +116,6 @@ public:
 
 Each member depends on those before it. When each member is constructed, this implementation guarantees that all of its dependencies are already present. The implicit `~Server()` destructs members in the reverse order that they were constructed, guaranteeing that no member will outlive its dependencies.
 
-----------------------------------------------
 ## 6. Prefer explicit lifecycle management & reference passing over statics/globals
 
 If a static object requires explicit initialization and/or destruction, consider using a non-static RAII object instead.
@@ -152,10 +146,9 @@ Note also that a static global object can only reliably depend on other static g
 
 ### Exceptions
 
-- Constant immutable data does not need an explicit lifecycle. In such cases, prefer declaring immutable dataconstexpr.
+- Constant immutable data does not need an explicit lifecycle. In such cases, prefer declaring immutable data `constexpr`.
 - There are rare cases when the lifecycle of an object cannot be known at compile time. An example is a resource that is shared between threads, and it is indeterminate which thread will be the last to use it. In such cases ([and only those cases](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rf-shared_ptr)), consider using [`std::shared_ptr<>`](https://en.cppreference.com/w/cpp/memory/shared_ptr).
 
-----------------------------------------------
 ## 7. Minimize work performed in destructors
 
 When there are multiple ways to release a resource, prefer the simplest option by default. In the following contrived example, we have an RAII transaction object with two options for closing the transaction.
