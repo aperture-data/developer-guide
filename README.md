@@ -18,7 +18,8 @@ C++ Specific
 
 * `private:` and `public:` tags aligned with `class` keyword.
 * Class name start with a capital letter.
-* Filename all lowercase and using dash as word separator.
+* ~Filename all lowercase and using dash as word separator.~
+   * Most C++ fieles use CamelCase.
 * Header file use `#pragma once`.
 * Private members start with an underscore (`_`) prefix.
 * Keep your lines to about 80 characters or less in length.
