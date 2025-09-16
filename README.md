@@ -56,4 +56,21 @@ Exceptionally, following repos are safe to use without pinning commit hash:
   * aws-actions/*
   * google-github-actions/*
   * docker/*
-  * hashicorp/*
+  * opentofu/*
+
+Input Verification
+----------------
+
+* When developing components, verify and sanitize all inputs from all sources.
+  + Example of component types:
+    + Application
+    + Bash Script
+    + Python Script
+    + Dockerfile
+    + Github Workflow
+  + Example of input sources:
+    + Envars
+    + CLI parameters
+    + Config file
+    + User input
+    + Http query parameters or req/res body
